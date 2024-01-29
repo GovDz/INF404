@@ -5,11 +5,12 @@
 #include "analyse_lexicale.h"
 #include "analyse_syntaxique.h"
 
-void analyser (char *fichier){
+void analyser (char *fichier,int *resultat){
     demarrer(fichier);
     Lexeme Var_lexeme_courant = lexeme_courant(); 
     if (Var_lexeme_courant.nature == ENTIER)
     {
+        *resultat = Var_lexeme_courant.valeur;
         avancer();
     }
     else
@@ -25,7 +26,9 @@ void analyser (char *fichier){
         case PLUS:
             avancer();
             Var_lexeme_courant = lexeme_courant();
-                if (Var_lexeme_courant.nature == ENTIER){avancer();}
+                if (Var_lexeme_courant.nature == ENTIER){
+                    *resultat = *resultat + Var_lexeme_courant.valeur;
+                    avancer();}
                 else{
                     printf("Erreur de syntaxe entier \n");
                     exit(1);
@@ -34,7 +37,9 @@ void analyser (char *fichier){
         case MOINS:
             avancer();
             Var_lexeme_courant = lexeme_courant();
-                if (Var_lexeme_courant.nature == ENTIER){avancer();}
+                if (Var_lexeme_courant.nature == ENTIER){
+                    *resultat = *resultat - Var_lexeme_courant.valeur;
+                    avancer();}
                 else{
                     printf("Erreur de syntaxe entier \n");
                     exit(1);
@@ -43,7 +48,20 @@ void analyser (char *fichier){
         case MUL:
             avancer();
             Var_lexeme_courant = lexeme_courant();
-                if (Var_lexeme_courant.nature == ENTIER){avancer();}
+                if (Var_lexeme_courant.nature == ENTIER){
+                    *resultat = *resultat * Var_lexeme_courant.valeur;
+                    avancer();}
+                else{
+                    printf("Erreur de syntaxe entier \n");
+                    exit(1);
+                }
+            break;
+        case DIV:
+            avancer();
+            Var_lexeme_courant = lexeme_courant();
+                if (Var_lexeme_courant.nature == ENTIER){
+                    *resultat = *resultat / Var_lexeme_courant.valeur;
+                    avancer();}
                 else{
                     printf("Erreur de syntaxe entier \n");
                     exit(1);
@@ -55,8 +73,7 @@ void analyser (char *fichier){
             exit(1);
             break;
         }
-        printf("A\n");
     }
     
-    printf("Yayy :D !! Syntaxe est correct ");
+    printf("Yayy :D !! Syntaxe est correct \n");
 }

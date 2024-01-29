@@ -1,1 +1,1 @@
-void analyser (char *fichier);
+void analyser (char *fichier, int *resultat);

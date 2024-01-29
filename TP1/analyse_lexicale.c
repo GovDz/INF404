@@ -122,6 +122,10 @@
                			lexeme_en_cours.nature = PLUS;
                			etat = E_FIN;
 			   			break;
+                     case '/':
+               			lexeme_en_cours.nature = DIV;
+               			etat = E_FIN;
+			   			break;
                		  case '-':
                			lexeme_en_cours.nature = MOINS;
                			etat = E_FIN;
@@ -222,7 +226,8 @@
 		case ENTIER: return "ENTIER" ;
 		case PLUS: return "PLUS" ;
       		case MOINS: return "MOINS" ;            
-      		case MUL: return "MUL" ;              
+      		case MUL: return "MUL" ;   
+            case DIV: return "DIV" ;             
       		case FIN_SEQUENCE: return "FIN_SEQUENCE" ;     
       		default: return "ERREUR" ;            
 	} ;
