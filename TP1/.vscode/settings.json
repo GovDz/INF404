@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "analyse_lexicale.h": "c",
+        "analyse_syntaxique.h": "c"
+    }
+}
