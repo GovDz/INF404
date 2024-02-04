@@ -16,6 +16,8 @@ bool is_para(){ // here is my simple function, to check if every parenthesis is 
         if(Var_lexeme_courant.nature == PARF) counter--;
         avancer();
         Var_lexeme_courant = lexeme_courant();
+        printf("counter = %d \n",counter);
+
     }
     return counter == 0;
 }
@@ -132,7 +134,7 @@ void rec_ea(int *resultat){
 }
 void analyser (char *fichier,int *resultat){
     demarrer(fichier);
-    if(!is_para){
+    if(!is_para()){
         printf("Erreur de syntaxe, les parenthèses ne sont pas fermées \n");
         exit(1);
     }
