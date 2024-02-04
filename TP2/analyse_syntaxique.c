@@ -1,10 +1,21 @@
 #include <string.h>
 #include <stdlib.h> 
 #include <stdio.h> 
+#include <stdbool.h>
 #include "lecture_caracteres.h"
 #include "analyse_lexicale.h"
 #include "analyse_syntaxique.h"
 
+bool is_para(){
+    Lexeme lexeme_en_cours = lexeme_courant();
+    bool is_para = true;
+    while (!fin_de_sequence())
+    {
+        if(lexeme_en_cours.nature == PAR_OUV)
+            counter++;
+    }
+    
+}
 void analyser (char *fichier,int *resultat){
     demarrer(fichier);
     Lexeme Var_lexeme_courant = lexeme_courant(); 
