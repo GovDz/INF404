@@ -219,6 +219,8 @@
 	 	case '-':  
 	 	case '*':
 	 	case '/':
+      case ')':
+      case '(':
             return 1;
 
         default:
@@ -236,7 +238,9 @@
       		case MOINS: return "MOINS" ;            
       		case MUL: return "MUL" ;   
             case DIV: return "DIV" ;             
-      		case FIN_SEQUENCE: return "FIN_SEQUENCE" ;     
+      		case FIN_SEQUENCE: return "FIN_SEQUENCE" ;
+            case PARO: return "PARO" ;
+            case PARF: return "PARF" ;     
       		default: return "ERREUR" ;            
 	} ;
    } 
