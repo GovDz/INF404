@@ -8,7 +8,7 @@
 void analyser (char *fichier,int *resultat){
     demarrer(fichier);
     Lexeme Var_lexeme_courant = lexeme_courant(); 
-    if (Var_lexeme_courant.nature == ENTIER)
+    if (Var_lexeme_courant.nature == ENTIER )
     {
         *resultat = Var_lexeme_courant.valeur;
         avancer();
