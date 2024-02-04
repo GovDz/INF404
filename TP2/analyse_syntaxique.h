@@ -1,0 +1,1 @@
+void analyser (char *fichier, int *resultat);

@@ -20,7 +20,8 @@
       ENTIER,           // sequence de chiffres
       PLUS,             // +
       MOINS,            // -
-      MUL,              // *
+      MUL,  
+      DIV,            // *
       FIN_SEQUENCE,     // pseudo lexeme ajoute en fin de sequence
     } Nature_Lexeme ;
 
