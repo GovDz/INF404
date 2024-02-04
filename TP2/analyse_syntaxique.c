@@ -29,7 +29,7 @@ void rec_ea(int *resultat){
     else if (Var_lexeme_courant.nature == PARO)
     {
         avancer();
-        rec_expr(resultat);
+        rec_ea(resultat);
     }
     else
     {
