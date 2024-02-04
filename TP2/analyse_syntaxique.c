@@ -129,7 +129,6 @@ void rec_ea(int *resultat){
         }
     }
     
-    printf("Yayy :D !! Syntaxe est correct \n");
 }
 void analyser (char *fichier,int *resultat){
     demarrer(fichier);
@@ -143,5 +142,8 @@ void analyser (char *fichier,int *resultat){
     {
         printf("Erreur de syntaxe \n");
         exit(1);
+    }
+    else{
+        printf("Yayy :D !! Syntaxe est correct \n");
     }
 }
