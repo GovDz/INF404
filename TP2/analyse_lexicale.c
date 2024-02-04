@@ -134,6 +134,14 @@
                			lexeme_en_cours.nature = MUL;
                			etat = E_FIN;
 			   			break;
+                     case ')':
+               			lexeme_en_cours.nature = PARF;
+               			etat = E_FIN;
+			   			break;
+                     case '(':
+               			lexeme_en_cours.nature = PARO;
+               			etat = E_FIN;
+			   			break;
 		       		  default:
 						printf("Erreur_Lexicale") ;
 				 		exit(0) ;
