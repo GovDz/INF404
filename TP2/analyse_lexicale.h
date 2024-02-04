@@ -22,7 +22,9 @@
       MOINS,            // -
       MUL,  
       DIV,            // *
-      FIN_SEQUENCE,     // pseudo lexeme ajoute en fin de sequence
+      FIN_SEQUENCE, // end
+      PARO, // )
+      PARF,    // )
     } Nature_Lexeme ;
 
 
