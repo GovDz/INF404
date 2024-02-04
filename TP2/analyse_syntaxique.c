@@ -16,7 +16,7 @@ bool is_para(){ // here is my simple function, to check if every parenthesis is 
         if(Var_lexeme_courant.nature == PARF) counter--;
         avancer();
         Var_lexeme_courant = lexeme_courant();
-        printf("counter = %d \n",counter);
+        // printf("counter = %d \n",counter);
 
     }
     return counter == 0;
