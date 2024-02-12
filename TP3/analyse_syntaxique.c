@@ -30,53 +30,94 @@ void rec_suite_seq_terme()
         avancer();
         rec_terme();
         rec_suite_seq_terme();
-    case MUL:
-    case DIV:
-        Op = rec_op2();
-        Ad = rec_terme();
-        A1 = creer_operation(Op, Ag, Ad);
-        return rec_suite_seq_terme(A1);
+        break;
     default:
-        return Ag;
+        break;
     }
 }
-Ast rec_facteur()
+void rec_seq_facteur()
 {
     Lexeme LC = lexeme_courant();
-    Ast A;
+    switch (LC.nature)
+    {
+    case PLUS:
+    case MOINS:
+        avancer();
+        rec_terme();
+        rec_suite_seq_terme();
+        break;
+    default:
+        break;
+    }
+}
+void rec_suite_seq_facteur()
+{
+    Lexeme LC = lexeme_courant();
+    switch (LC.nature)
+    {
+    case PLUS:
+    case MOINS:
+        avancer();
+        rec_terme();
+        rec_suite_seq_terme();
+        break;
+    default:
+        break;
+    }
+}
+
+void rec_facteur()
+{
+    Lexeme LC = lexeme_courant();
     switch (LC.nature)
     {
     case ENTIER:
-        A = creer_valeur(LC.valeur);
         avancer();
         break;
     case PARO:
-        avancer();
-        A = rec_eag();
-        if (LC.nature == PARF)
+    avancer();
+    rec_eag();
+    if(LC.nature == PARF){
             avancer();
-        else
-            printf("Erreur de syntaxe : ')' attendu ");
-        break;
-    case MOINS:
-        avancer();
-        A = rec_facteur();
-        A = creer_op_unaire(MOINS, A);
-        break;
+        }
+        else{
+            printf("Erreur :( ");
+            exit(1);
+        }
     default:
         printf("Erreur de syntaxe : '(', entier ou ')' attendu ");
         break;
     }
-    return A;
 }
-Ast creer_op_unaire(TypeOperateur op, Ast a)
+void rec_op1()
 {
-    Ast a1 = (Ast)malloc(sizeof(NoeudAst));
-    a1->nature = OPERATION;
-    a1->operateur = op;
-    a1->gauche = a;
-    a1->droite = NULL;
-    return a1;
+    Lexeme LC = lexeme_courant();
+    TypeOperateur op;
+    switch (LC.nature)
+    {
+    case PLUS:
+    case MOINS:
+        avancer();
+        break;
+    default:
+        printf("Erreur de syntaxe : '+' ou '-' attendu ");
+        break;
+    }
+}
+void rec_op2()
+{
+    Lexeme LC = lexeme_courant();
+    TypeOperateur op;
+    switch (LC.nature)
+    {
+    case PLUS:
+    case MOINS:
+        avancer();
+        break;
+    default:
+        printf("Erreur de syntaxe : '+' ou '-' attendu ");
+        break;
+    }
 }
 void rec_ea(int *resultat){
     Lexeme Var_lexeme_courant = lexeme_courant(); 
