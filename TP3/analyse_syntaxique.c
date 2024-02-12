@@ -10,15 +10,35 @@
 #include "type_ast.h"
 
 
-Ast rec_eag(){
-    return rec_seq_terme();
+void rec_eag(){
+    rec_seq_terme();
 }
-Ast rec_seq_terme(){
-    Ast A1 = rec_terme();
-    return rec_suite_seq_terme(A1);
+void rec_seq_terme(){
+    rec_terme();
+    rec_suite_seq_terme();
 }
-Ast rec_terme(){
-        return rec_facteur();
+void rec_terme(){
+    rec_facteur();
+}
+void rec_suite_seq_terme()
+{
+    Lexeme LC = lexeme_courant();
+    switch (LC.nature)
+    {
+    case PLUS:
+    case MOINS:
+        avancer();
+        rec_terme();
+        rec_suite_seq_terme();
+    case MUL:
+    case DIV:
+        Op = rec_op2();
+        Ad = rec_terme();
+        A1 = creer_operation(Op, Ag, Ad);
+        return rec_suite_seq_terme(A1);
+    default:
+        return Ag;
+    }
 }
 Ast rec_facteur()
 {
@@ -48,6 +68,15 @@ Ast rec_facteur()
         break;
     }
     return A;
+}
+Ast creer_op_unaire(TypeOperateur op, Ast a)
+{
+    Ast a1 = (Ast)malloc(sizeof(NoeudAst));
+    a1->nature = OPERATION;
+    a1->operateur = op;
+    a1->gauche = a;
+    a1->droite = NULL;
+    return a1;
 }
 void rec_ea(int *resultat){
     Lexeme Var_lexeme_courant = lexeme_courant(); 
