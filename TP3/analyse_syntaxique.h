@@ -1,3 +1,12 @@
-void analyser (char *fichier, int *resultat);
+void analyser (char *fichier);
 void counter_para(int *number);
 void rec_ea(int *resultat);
+void rec_eag();
+void rec_seq_terme();
+void rec_terme();
+void rec_suite_seq_terme();
+void rec_seq_facteur();
+void rec_suite_seq_facteur();
+void rec_facteur();
+void rec_op1();
+void rec_op2();

@@ -5,9 +5,7 @@
 #include "lecture_caracteres.h"
 #include "analyse_lexicale.h"
 #include "analyse_syntaxique.h"
-#include "ast_construction.h"
-#include "ast_parcours.h"
-#include "type_ast.h"
+
 
 
 void rec_eag(){
@@ -75,15 +73,17 @@ void rec_facteur()
         avancer();
         break;
     case PARO:
-    avancer();
-    rec_eag();
-    if(LC.nature == PARF){
+        printf(" : %s",LC.valeur);
+        avancer();
+        rec_eag();
+        if(LC.nature == PARF){
             avancer();
         }
         else{
-            printf("Erreur :( ");
-            exit(1);
+            printf("Erreur :( PARO ");
+            printf(" : %s",LC.valeur);
         }
+        break;
     default:
         printf("Erreur de syntaxe : '(', entier ou ')' attendu ");
         break;
@@ -92,7 +92,6 @@ void rec_facteur()
 void rec_op1()
 {
     Lexeme LC = lexeme_courant();
-    TypeOperateur op;
     switch (LC.nature)
     {
     case PLUS:
@@ -107,7 +106,6 @@ void rec_op1()
 void rec_op2()
 {
     Lexeme LC = lexeme_courant();
-    TypeOperateur op;
     switch (LC.nature)
     {
     case PLUS:
@@ -230,14 +228,9 @@ void rec_ea(int *resultat){
     }
     
 }
-void analyser (char *fichier,int *resultat){
+void analyser (char *fichier){
     demarrer(fichier);
-    if(!is_para()){
-        printf("Erreur de syntaxe, les parenthèses ne sont pas fermées \n");
-        exit(1);
-    }
-    demarrer(fichier);
-    rec_ea(resultat);
+    rec_eag();
     if (!fin_de_sequence())
     {
         printf("Erreur de syntaxe \n");
