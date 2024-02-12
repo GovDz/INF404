@@ -73,7 +73,6 @@ void rec_facteur()
         avancer();
         break;
     case PARO:
-        printf(" : %s",LC.valeur);
         avancer();
         rec_eag();
         if(LC.nature == PARF){
@@ -81,7 +80,6 @@ void rec_facteur()
         }
         else{
             printf("Erreur :( PARO ");
-            printf(" : %s",LC.valeur);
         }
         break;
     default:
