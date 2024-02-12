@@ -5,21 +5,49 @@
 #include "lecture_caracteres.h"
 #include "analyse_lexicale.h"
 #include "analyse_syntaxique.h"
+#include "ast_construction.h"
+#include "ast_parcours.h"
+#include "type_ast.h"
 
-bool is_para(){ // here is my simple function, to check if every parenthesis is closed
 
-    Lexeme Var_lexeme_courant = lexeme_courant();
-    int counter=0;
-    while (!fin_de_sequence())
+Ast rec_eag(){
+    return rec_seq_terme();
+}
+Ast rec_seq_terme(){
+    Ast A1 = rec_terme();
+    return rec_suite_seq_terme(A1);
+}
+Ast rec_terme(){
+        return rec_facteur();
+}
+Ast rec_facteur()
+{
+    Lexeme LC = lexeme_courant();
+    Ast A;
+    switch (LC.nature)
     {
-        if(Var_lexeme_courant.nature == PARO) counter++;
-        if(Var_lexeme_courant.nature == PARF) counter--;
+    case ENTIER:
+        A = creer_valeur(LC.valeur);
         avancer();
-        Var_lexeme_courant = lexeme_courant();
-        // printf("counter = %d \n",counter);
-
+        break;
+    case PARO:
+        avancer();
+        A = rec_eag();
+        if (LC.nature == PARF)
+            avancer();
+        else
+            printf("Erreur de syntaxe : ')' attendu ");
+        break;
+    case MOINS:
+        avancer();
+        A = rec_facteur();
+        A = creer_op_unaire(MOINS, A);
+        break;
+    default:
+        printf("Erreur de syntaxe : '(', entier ou ')' attendu ");
+        break;
     }
-    return counter == 0;
+    return A;
 }
 void rec_ea(int *resultat){
     Lexeme Var_lexeme_courant = lexeme_courant(); 
