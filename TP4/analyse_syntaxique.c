@@ -1,25 +1,23 @@
 #include <string.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <stdio.h>
-
 #include "analyse_syntaxique.h"
 #include "type_ast.h"
 #include "ast_construction.h"
 #include "ast_parcours.h"
 #include "analyse_lexicale.h"
 
-TypeOperateur Operateur(Nature_Lexeme nature);
+TypeOperateur Operateur(Nature_Lexeme nature); // si on met cette fonction dans analyse_lexicale.h, on a une erreur de compilation
 
-void rec_eag(Ast *A1) {
+void rec_eag(Ast *A1) {  // d'apres le cours + aide d'AI pour l'optimisation
     seq_terme(A1);
 }
-
 void seq_terme(Ast *A2) {
     Ast A1;
     terme(&A1);
     suite_seq_terme(A1, A2);
 }
-
 void suite_seq_terme(Ast A1, Ast *A2) {
     Ast A3, A4;
     TypeOperateur op;
@@ -32,17 +30,14 @@ void suite_seq_terme(Ast A1, Ast *A2) {
         *A2 = A1;
     }
 }
-
 void terme(Ast *A1) {
     seq_facteur(A1);
 }
-
 void seq_facteur(Ast *A2) {
     Ast A1;
     facteur(&A1);
     suite_seq_facteur(A1, A2);
 }
-
 void suite_seq_facteur(Ast A1, Ast *A2) {
     Ast A3, A4;
     TypeOperateur op;
@@ -55,7 +50,6 @@ void suite_seq_facteur(Ast A1, Ast *A2) {
         *A2 = A1;
     }
 }
-
 void facteur(Ast *A1) {
     switch (lexeme_courant().nature) {
         case ENTIER:
@@ -76,27 +70,27 @@ void facteur(Ast *A1) {
     }
 }
 
-int op1(TypeOperateur *Op) {
+bool op1(TypeOperateur *Op) {
     switch (lexeme_courant().nature) {
         case PLUS:
         case MOINS:
             *Op = Operateur(lexeme_courant().nature);
             avancer();
-            return 1;
+            return true;
         default:
-            return 0;
+            return false;
     }
 }
 
-int op2(TypeOperateur *Op) {
+bool op2(TypeOperateur *Op) {
     switch (lexeme_courant().nature) {
         case MUL:
         case DIV:
             *Op = Operateur(lexeme_courant().nature);
             avancer();
-            return 1;
+            return true;
         default:
-            return 0;
+            return false;
     }
 }
 
@@ -106,12 +100,12 @@ TypeOperateur Operateur(Nature_Lexeme nature) {
             return N_PLUS;
         case MOINS:
             return N_MOINS;
-        case MUL:
-            return N_MUL;
         case DIV:
             return N_DIV;
+        case MUL:
+            return N_MUL;
         default:
-            handle_error("Erreur operateur");
+            handle_error("Operateur");
     }
 }
 int analyser(char *nomFichier, Ast *A) {
@@ -119,12 +113,11 @@ int analyser(char *nomFichier, Ast *A) {
     rec_eag(A);
 
     if (lexeme_courant().nature == FIN_SEQUENCE) {
-        printf("\nSyntaxe correcte\n");
+        printf("\n200 OK :))\n");
         afficherA(*A);
-        printf("\n");
         return 1;
     } else {
-        handle_error("Erreur lors de l'analyse syntaxique");
+        handle_error("Erreur syntaxique\n");
         return 0;
     }
 }
