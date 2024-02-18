@@ -42,7 +42,7 @@ void afficher(Ast expr) {
 
 int evaluation(Ast expr)
 {
-	int valeur = 0;
+	int valeur = 0, deno;	
 	switch (expr->nature)
 	{
 	case OPERATION:
@@ -58,14 +58,22 @@ int evaluation(Ast expr)
 			valeur = evaluation(expr->gauche) * evaluation(expr->droite);
 			break;
 		case N_DIV:
-			valeur = evaluation(expr->gauche) / evaluation(expr->droite);
-			break;
+			deno = evaluation(expr->droite);
+			if (/* condition */ deno == 0)
+			{
+				valeur = evaluation(expr->gauche) / deno;
+			}else{
+				printf("Division par 0 :( \n");
+			}
 		}
-		break;
+			break;
 	case VALEUR:
 		valeur = expr->valeur;
 		break;
-	}
+	default:
+
+		exit(1);
+	}	
 	return valeur;
 }
 
