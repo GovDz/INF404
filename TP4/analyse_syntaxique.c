@@ -110,10 +110,8 @@ int analyser(char *nomFichier, Ast *A) {
     rec_eag(A);
 
     if (fin_de_sequence()) {
-        printf("\n\t\t\t200 OK :))\n\n");
+        printf("\n200 OK :))\n\n");
         afficher(*A);
-        printf("\n\t\t OK :))\n\n");
-
         return 1;
     } else {
         handle_error("Erreur syntaxique\n");
