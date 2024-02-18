@@ -110,7 +110,7 @@ int analyser(char *nomFichier, Ast *A) {
     rec_eag(A);
 
     if (fin_de_sequence()) {
-        printf("\n200 OK :))\n\n");
+        printf("\n200 OK :))\nArbre : ");
         afficher(*A);
         return 1;
     } else {

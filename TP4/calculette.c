@@ -14,5 +14,6 @@ int main (int argc, char *argv[]) {
         exit(1);
     }
    analyser(argv[1],arbre);
+   	printf("\nFinal Result : %d \n", evaluation(*arbre));
    return 0 ;
 }
