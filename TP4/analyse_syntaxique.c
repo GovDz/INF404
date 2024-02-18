@@ -1,11 +1,7 @@
 #include <string.h>
 #include <stdlib.h>
-#include <stdbool.h>
 #include <stdio.h>
 #include "analyse_syntaxique.h"
-#include "type_ast.h"
-#include "ast_construction.h"
-#include "ast_parcours.h"
 #include "analyse_lexicale.h"
 
 TypeOperateur Operateur(Nature_Lexeme nature); // si on met cette fonction dans analyse_lexicale.h, on a une erreur de compilation
@@ -106,15 +102,18 @@ TypeOperateur Operateur(Nature_Lexeme nature) {
             return N_MUL;
         default:
             handle_error("Operateur");
+            exit(1);
     }
 }
 int analyser(char *nomFichier, Ast *A) {
     demarrer(nomFichier);
     rec_eag(A);
 
-    if (lexeme_courant().nature == FIN_SEQUENCE) {
-        printf("\n200 OK :))\n");
-        afficherA(*A);
+    if (fin_de_sequence()) {
+        printf("\n\t\t\t200 OK :))\n\n");
+        afficher(*A);
+        printf("\n\t\t OK :))\n\n");
+
         return 1;
     } else {
         handle_error("Erreur syntaxique\n");
