@@ -60,8 +60,8 @@ int evaluation(Ast expr)
 			}else{
 				printf("Division par 0 :( \n"); // ERREUR
 			}
-		}
 			break;
+		}
 	case VALEUR:
 		valeur = expr->valeur;
 		break;

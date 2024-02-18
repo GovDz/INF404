@@ -31,38 +31,8 @@ void afficher(Ast expr) {
 	}
 }
 
-int evaluation(Ast expr)
-{
-	int valeur = 0;
-	switch (expr->nature)
-	{
-	case OPERATION:
-		switch (expr->operateur)
-		{
-		case N_PLUS:
-			valeur = evaluation(expr->gauche) + evaluation(expr->droite);
-			break;
-		case N_MOINS:
-			valeur = evaluation(expr->gauche) - evaluation(expr->droite);
-			break;
-		case N_MUL:
-			valeur = evaluation(expr->gauche) * evaluation(expr->droite);
-			break;
-		case N_DIV:
-			valeur = evaluation(expr->gauche) / evaluation(expr->droite);
-			break;
-		case N_PARO:
-			valeur = evaluation(expr->gauche);
-			break;
-		case N_PARF:
-			valeur = evaluation(expr->droite);
-			break;
-		}
-		break;
-	case VALEUR:
-		valeur = expr->valeur;
-		break;
-	}
-	return valeur;
+int evaluation(Ast expr) {
+      // A COMPLETER !
+      return -1 ;
 }
 
