@@ -60,12 +60,6 @@ int evaluation(Ast expr)
 		case N_DIV:
 			valeur = evaluation(expr->gauche) / evaluation(expr->droite);
 			break;
-		case N_PARO:
-			valeur = evaluation(expr->gauche);
-			break;
-		case N_PARF:
-			valeur = evaluation(expr->droite);
-			break;
 		}
 		break;
 	case VALEUR:
