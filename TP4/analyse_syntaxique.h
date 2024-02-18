@@ -1,18 +1,21 @@
-#include "lecture_caracteres.h"
-#include "analyse_lexicale.h"
-#include "analyse_syntaxique.h"
+#ifndef ANALYSE_SYNTAXIQUE_H
+#define ANALYSE_SYNTAXIQUE_H
+
+
 #include "type_ast.h"
 #include "ast_construction.h"
+#include "ast_parcours.h"
 
-void analyser (char *fichier, Ast *arbre);
-void counter_para(int *number);
-void rec_ea(int *resultat);
 Ast rec_eag();
-Ast rec_seq_terme();
-Ast rec_terme();
-Ast rec_suite_seq_terme();
-Ast rec_seq_facteur();
-Ast rec_suite_seq_facteur();
-Ast rec_facteur();
-TypeOperateur rec_op1();
-TypeOperateur rec_op2();
+Ast seq_terme();
+Ast suite_seq_terme(Ast A1, Ast *A2);
+Ast terme();
+Ast seq_facteur();
+Ast suite_seq_facteur(Ast A1, Ast *A2);
+Ast facteur();
+TypeOperateur op1();
+TypeOperateur op2();
+
+#endif  // ANALYSE_SYNTAXIQUE_H
+
+int analyser(char *nomFichier, Ast *A);

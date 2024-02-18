@@ -1,253 +1,155 @@
 #include <string.h>
-#include <stdlib.h> 
-#include <stdio.h> 
-#include <stdbool.h>
-#include "lecture_caracteres.h"
-#include "analyse_lexicale.h"
+#include <stdlib.h>
+#include <stdio.h>
+
 #include "analyse_syntaxique.h"
 #include "type_ast.h"
 #include "ast_construction.h"
+#include "ast_parcours.h"
+#include "analyse_lexicale.h"
 
-
-
-Ast rec_eag(){
-    return rec_seq_terme();
-}
-Ast rec_seq_terme(){
-    Ast A1 = rec_terme();
-    return rec_suite_seq_terme(A1);
-}
-Ast rec_terme(){
-    return rec_facteur();
-}
-Ast rec_suite_seq_terme(Ast *Ag)
-{
-    Ast *Ad,*A1;
-    TypeOperateur Op;
-    Lexeme LC = lexeme_courant();
-    switch (LC.nature)
-    {
-    case PLUS:
-    case MOINS:
-        Op = rec_op1();
-        Ad = rec_terme();
-        A1 = creer_operation(Op, Ag, Ad);
-        return rec_suite_seq_terme(A1);
-    case DIV:
-    case MUL:
-        Op = rec_op2();
-        Ad = rec_terme();
-        A1 = creer_operation(Op, Ag, Ad);
-        return rec_suite_seq_terme(A1);
-    default:
-        return Ag;
-    }
-}
-Ast rec_facteur()
-{
-    Lexeme LC = lexeme_courant();
-    Ast A;
-    switch (LC.nature)
-    {
-    case ENTIER:
-        A = creer_valeur(LC.valeur);
-        avancer();
-        break;
-    case PARO:
-        avancer();
-        A = rec_eag();
-        if(LC.nature == PARF){
-            avancer();
-        }
-        else{
-            printf("Erreur :( PARO ");
-        }
-        break;
-    case MOINS:
-        avancer();
-        A = rec_facteur();
-        A = creer_op_unaire(MOINS, A);
-        break;
-    default:
-        printf("Erreur de syntaxe : '(', entier ou ')'");
-        break;
-    }
-    return A;
-}
-TypeOperateur rec_op1()
-{
-    Lexeme LC = lexeme_courant();
-    TypeOperateur Op;
-    switch (LC.nature)
-    {
-    case PLUS:
-        Op = N_PLUS;
-        avancer();
-        break;
-    case MOINS:
-        Op = N_MOINS;
-        avancer();
-        break;
-    default:
-        printf("Erreur : '+' / '-'");
-        break;
-    }
-    return Op;
-}
-TypeOperateur rec_op1()
-{
-    Lexeme LC = lexeme_courant();
-    TypeOperateur Op;
-    switch (LC.nature)
-    {
-    case PLUS:
-        Op = N_PLUS;
-        avancer();
-        break;
-    case MOINS:
-        Op = N_MOINS;
-        avancer();
-        break;
-    default:
-        printf("Erreur : '+' / '-'");
-        break;
-    }
-    return Op;
-}
-Ast creer_op_unaire(TypeOperateur Op, Ast A)
-{
-    Ast A1 = (Ast)malloc(sizeof(NoeudAst));
-    A1->nature = OPERATION;
-    A1->operateur = Op;
-    A1->gauche = A;
-    A1->droite = NULL;
+TypeOperateur Operateur(Nature_Lexeme nature); // si on met cette fonction dans analyse_lexicale.h, on a une erreur de compilation
+Ast rec_eag() { // d'apres le cours
+    Ast A1;
+    seq_terme(&A1);
     return A1;
 }
-/*
-void rec_ea(int *resultat){
-    Lexeme Var_lexeme_courant = lexeme_courant(); 
-    if (Var_lexeme_courant.nature == ENTIER )
-    {
-        *resultat = Var_lexeme_courant.valeur;
-        avancer();
-    }
-    else if (Var_lexeme_courant.nature == PARO)
-    {
-        avancer();
-        rec_ea(resultat);
-    }
-    else
-    {
-        printf("Erreur de syntaxe entier \n");
-        exit(1);
-    }
-    while (!fin_de_sequence())
-    {
-        Var_lexeme_courant = lexeme_courant();
-        switch (Var_lexeme_courant.nature)
-        {
-        case PLUS:
-            avancer();
-            Var_lexeme_courant = lexeme_courant();
-                if (Var_lexeme_courant.nature == ENTIER){
-                    *resultat = *resultat + Var_lexeme_courant.valeur;
-                    avancer();}
-                    else if (Var_lexeme_courant.nature == PARO)
-                    {
-                        int temp = 0;
-                        rec_ea(&temp);
-                        *resultat = *resultat - temp;
-                    }
-                else{
-                    printf("Erreur de syntaxe entier \n");
-                    exit(1);
-                }
-            break;
-        case MOINS:
-            avancer();
-            Var_lexeme_courant = lexeme_courant();
-                if (Var_lexeme_courant.nature == ENTIER){
-                    *resultat = *resultat - Var_lexeme_courant.valeur;
-                    avancer();}
-                    else if (Var_lexeme_courant.nature == PARO)
-                    {
-                        int temp = 0;
-                        rec_ea(&temp);
-                        *resultat = *resultat - temp;
-                    }
-                else{
-                    printf("Erreur de syntaxe entier \n");
-                    exit(1);
-                }
-            break;
-        case MUL:
-            avancer();
-            Var_lexeme_courant = lexeme_courant();
-                if (Var_lexeme_courant.nature == ENTIER){
 
-                    *resultat = *resultat * Var_lexeme_courant.valeur;
-                    avancer();}
-                    else if (Var_lexeme_courant.nature == PARO)
-                    {
-                        int temp = 0;
-                        rec_ea(&temp);
-                        *resultat = *resultat * temp;
-                    }
-                else{
-                    printf("Erreur de syntaxe entier \n");
-                    exit(1);
-                }
-            break;
-        case DIV:
-            avancer();
-            Var_lexeme_courant = lexeme_courant();
-                if (Var_lexeme_courant.nature == ENTIER){
-                    if (Var_lexeme_courant.valeur == 0)
-                    {
-                        printf("Erreur de syntaxe division par 0 \n");
-                        exit(1);}
-                    *resultat = *resultat / Var_lexeme_courant.valeur;
-                    avancer();}
-                                        else if (Var_lexeme_courant.nature == PARO)
-                    {
-                        int temp = 0;
-                        rec_ea(&temp);
-                        if(temp == 0){
-                            printf("Erreur de syntaxe division par 0 \n");
-                            exit(1);
-                        }
-                        *resultat = *resultat / temp;
-                    }
-                else{
-                    printf("Erreur de syntaxe entier \n");
-                    exit(1);
-                }
-            break;
-            case PARF:
-            avancer();
-            break;
-        
-        default:
-            printf("Erreur :( \n");
-            exit(1);
-            break;
-        }
-    }
-    
+Ast seq_terme() { // d'apres le cours
+    Ast A2;
+    Ast A1;
+    terme(&A1);
+    return suite_seq_terme(A1, &A2);
 }
-*/
-void analyser (char *fichier, Ast *arbre){
-    demarrer(fichier);
-    *arbre = rec_eag();
-    if (!fin_de_sequence())
-    {
-        printf("Erreur de syntaxe \n");
-        exit(1);
+
+Ast suite_seq_terme(Ast A1, Ast *A2) { // d'apres le cours
+    Ast A3, A4;
+    TypeOperateur op;
+
+    if (op1(&op)) {
+        terme(&A3);
+        A4 = creer_operation(op, A1, A3);
+        return suite_seq_terme(A4, A2);
+    } else {
+        *A2 = A1;
+        return *A2;
     }
-    else{
-        printf("Yayy :D !! Syntaxe est correct \n");
+}
+
+Ast terme() { // d'apres le cours
+    Ast A1;
+    seq_facteur(&A1);
+    return A1;
+}
+
+Ast seq_facteur() { // d'apres le cours
+    Ast A2;
+    Ast A1;
+    facteur(&A1);
+    return suite_seq_facteur(A1, &A2);
+}
+
+Ast suite_seq_facteur(Ast A1, Ast *A2) { // d'apres le cours
+    Ast A3, A4;
+    TypeOperateur op;
+    int r = op2(&op);
+
+    if (r != 0) {
+        facteur(&A3);
+        A4 = creer_operation(op, A1, A3);
+        return suite_seq_facteur(A4, A2);
+    } else {
+        *A2 = A1;
+        return *A2;
     }
-    printf(" OK :) \n");
-    int resultat= evaluation(*arbre);
-    printf("Le resultat est : %d \n",resultat);
+}
+
+Ast facteur() {
+    Ast A1;
+
+    switch (lexeme_courant().nature) {
+        case ENTIER:
+            A1 = creer_valeur(lexeme_courant().valeur);
+            avancer();
+            break;
+        case PARO:
+            avancer();
+            rec_eag(&A1);
+            if (lexeme_courant().nature == PARF) {
+                avancer();
+            } else {
+                printf("ERREUR : parenthese fermante attendue (ligne %u, colonne %u)\n",
+                       lexeme_courant().ligne, lexeme_courant().colonne);
+                exit(1);
+            }
+            break;
+        default:
+            printf("ERREUR : entier ou parenthese ouvrante attendu (ligne %u, colonne %u)\n",
+                   lexeme_courant().ligne, lexeme_courant().colonne);
+            exit(0);
+    }
+
+    return A1;
+}
+
+TypeOperateur op1() {
+    TypeOperateur Op;
+
+    switch (lexeme_courant().nature) {
+        case PLUS:
+        case MOINS:
+            Op = Operateur(lexeme_courant().nature);
+            avancer();
+            return Op;
+        default:
+            return -1;  // Or any value indicating no operator found
+    }
+}
+
+TypeOperateur op2() {
+    TypeOperateur Op;
+
+    switch (lexeme_courant().nature) {
+        case MUL:
+        case DIV:
+            Op = Operateur(lexeme_courant().nature);
+            avancer();
+            return Op;
+        default:
+            return -1;  // Or any value indicating no operator found
+    }
+}
+
+TypeOperateur Operateur(Nature_Lexeme nature) {
+    switch (nature) {
+        case PLUS:
+            return N_PLUS;
+        case MOINS:
+            return N_MOINS;
+        case MUL:
+            return N_MUL;
+        case DIV:
+            return N_DIV;
+        default:
+            printf("Erreur operateur");
+            exit(1);
+    }
+}
+
+/* ----------------------------------------------------------------------- */
+
+int analyser(char *nomFichier, Ast *A) {
+    demarrer(nomFichier);
+    *A = rec_eag();
+
+    if ((lexeme_courant().nature == FIN_SEQUENCE)) {
+        /* syntaxe correcte */
+        printf("\nSyntaxe correcte\n");
+        afficherA(*A); // on affiche l'AST
+        printf("\n");
+        return 1;
+    } else {
+        printf("Erreur lors de l'analyse syntaxique ...\n");
+        return 0;
+    }
 }

@@ -1,5 +1,6 @@
 {
     "files.associations": {
-        "lecture_caracteres.h": "c"
+        "lecture_caracteres.h": "c",
+        "ast_construction.h": "c"
     }
 }

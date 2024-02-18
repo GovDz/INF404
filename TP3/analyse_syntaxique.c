@@ -66,6 +66,7 @@ void rec_suite_seq_facteur()
 
 void rec_facteur()
 {
+    Ast 
     Lexeme LC = lexeme_courant();
     switch (LC.nature)
     {

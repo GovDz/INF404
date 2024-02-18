@@ -36,7 +36,7 @@
       int valeur;          // valeur d'un entier
    } Lexeme ; 
 
-   void afficher_lexem(Lexeme l);
+   void afficher(Lexeme l);
 
    void demarrer(char *nom_fichier);
    // e.i. : indifferent
