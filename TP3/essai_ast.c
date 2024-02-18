@@ -60,15 +60,23 @@ Valeur de l'expression : 1
 */
 /*====================================================*/
 /*====================================================*/
-    // 2 + 3 / (5 - 2)
+    // 3 / (5 - 2 - 3)
+
  Ast ast1, ast2, ast3, ast4,ast5, ast ;
  ast1  = creer_valeur(2) ;
  ast2  = creer_valeur(3) ;
  ast3  = creer_valeur(5) ;
- ast4 = creer_operation(N_PLUS, ast1, ast2) ;
- ast5 = creer_operation(N_MOINS, ast3,ast1);
- ast = creer_operation(N_DIV, ast4, ast5) ;
+ ast4 = creer_operation(N_MOINS, ast3, ast1) ;
+ ast5 = creer_operation(N_MOINS, ast4,ast2);
+ ast = creer_operation(N_DIV, ast2, ast5) ;
 
+/*
+Arbre abstrait de l'expression
+(3/((5-2)-3))
+:( division sur 0
+*/
+/*====================================================*/
+/*====================================================*/
  printf("Arbre abstrait de l'expression\n") ;
  afficher(ast) ; 
  printf("\n\nValeur de l'expression : %d\n", evaluation(ast)) ;

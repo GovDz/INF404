@@ -61,7 +61,7 @@ int evaluation(Ast expr)
                 valeur = evaluation(expr->gauche) / deno;
             else
             {
-                printf(":( division sur 0 \n");
+                printf("\n:( division sur 0 \n");
                 exit(1);
             }
             break;
