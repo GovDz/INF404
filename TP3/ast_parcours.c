@@ -13,14 +13,8 @@ void aff_operateur(TypeOperateur op){
 		case N_MUL:
 			printf("*") ;
 			break;
-		case N_DIV:
+		case N_DIV: // division
 			printf("/") ;
-			break;
-		case N_PARO:
-			printf("(") ;
-			break;
-		case N_PARF:
-			printf(")") ;
 			break;
 	} 
 }
@@ -59,11 +53,11 @@ int evaluation(Ast expr)
 			break;
 		case N_DIV:
 			deno = evaluation(expr->droite);
-			if (/* condition */ deno == 0)
+			if (/* condition */ deno != 0) // division par 0
 			{
 				valeur = evaluation(expr->gauche) / deno;
 			}else{
-				printf("Division par 0 :( \n");
+				printf("Division par 0 :( \n"); // ERREUR
 			}
 		}
 			break;
@@ -71,7 +65,6 @@ int evaluation(Ast expr)
 		valeur = expr->valeur;
 		break;
 	default:
-
 		exit(1);
 	}	
 	return valeur;
