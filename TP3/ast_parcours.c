@@ -37,37 +37,46 @@ void afficher(Ast expr) {
 
 int evaluation(Ast expr)
 {
-	int valeur = 0, deno;	
-	switch (expr->nature)
-	{
-	case OPERATION:
-		switch (expr->operateur)
-		{
-		case N_PLUS:
-			valeur = evaluation(expr->gauche) + evaluation(expr->droite);
-			break;
-		case N_MOINS:
-			valeur = evaluation(expr->gauche) - evaluation(expr->droite);
-			break;
-		case N_MUL:
-			valeur = evaluation(expr->gauche) * evaluation(expr->droite);
-			break;
-		case N_DIV:
-			deno = evaluation(expr->droite);
-			if (/* condition */ deno != 0) // division par 0
-			{
-				valeur = evaluation(expr->gauche) / deno;
-			}else{
-				printf("Division par 0 :( \n"); // ERREUR
-			}
-			break;
-		}
-	case VALEUR:
-		valeur = expr->valeur;
-		break;
-	default:
-		exit(1);
-	}	
-	return valeur;
-}
+    int valeur, deno;
+    switch (expr->nature)
+    {
+    case OPERATION:
+        switch (expr->operateur)
+        {
+        case N_MUL:
+            valeur = evaluation(expr->gauche) * evaluation(expr->droite);
+            break;
 
+        case N_MOINS:
+            valeur = evaluation(expr->gauche) - evaluation(expr->droite);
+            break;
+
+        case N_PLUS:
+            valeur = evaluation(expr->gauche) + evaluation(expr->droite);
+            break;
+
+        case N_DIV: 
+            deno = evaluation(expr->droite);
+            if (deno!=0)
+                valeur = evaluation(expr->gauche) / deno;
+            else
+            {
+                printf(":( division sur 0 \n");
+                exit(1);
+            }
+            break;
+
+        default:
+            exit(1);
+        }
+        break;
+
+    case VALEUR:
+        valeur = expr->valeur;
+        break;
+    default:
+        exit(1);
+    }
+
+    return valeur;
+}
