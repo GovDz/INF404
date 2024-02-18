@@ -5,76 +5,57 @@
 #include "lecture_caracteres.h"
 #include "analyse_lexicale.h"
 #include "analyse_syntaxique.h"
+#include "type_ast.h"
+#include "ast_construction.h"
 
 
 
-void rec_eag(){
-    rec_seq_terme();
+Ast rec_eag(){
+    return rec_seq_terme();
 }
-void rec_seq_terme(){
-    rec_terme();
-    rec_suite_seq_terme();
+Ast rec_seq_terme(){
+    Ast A1 = rec_terme();
+    return rec_suite_seq_terme(A1);
 }
-void rec_terme(){
-    rec_facteur();
+Ast rec_terme(){
+    return rec_facteur();
 }
-void rec_suite_seq_terme()
+Ast rec_suite_seq_terme(Ast *Ag)
 {
+    Ast *Ad,*A1;
+    TypeOperateur Op;
     Lexeme LC = lexeme_courant();
     switch (LC.nature)
     {
     case PLUS:
     case MOINS:
-        avancer();
-        rec_terme();
-        rec_suite_seq_terme();
-        break;
+        Op = rec_op1();
+        Ad = rec_terme();
+        A1 = creer_operation(Op, Ag, Ad);
+        return rec_suite_seq_terme(A1);
+    case DIV:
+    case MUL:
+        Op = rec_op2();
+        Ad = rec_terme();
+        A1 = creer_operation(Op, Ag, Ad);
+        return rec_suite_seq_terme(A1);
     default:
-        break;
+        return Ag;
     }
 }
-void rec_seq_facteur()
+Ast rec_facteur()
 {
     Lexeme LC = lexeme_courant();
-    switch (LC.nature)
-    {
-    case PLUS:
-    case MOINS:
-        avancer();
-        rec_terme();
-        rec_suite_seq_terme();
-        break;
-    default:
-        break;
-    }
-}
-void rec_suite_seq_facteur()
-{
-    Lexeme LC = lexeme_courant();
-    switch (LC.nature)
-    {
-    case PLUS:
-    case MOINS:
-        avancer();
-        rec_terme();
-        rec_suite_seq_terme();
-        break;
-    default:
-        break;
-    }
-}
-
-void rec_facteur()
-{
-    Lexeme LC = lexeme_courant();
+    Ast A;
     switch (LC.nature)
     {
     case ENTIER:
+        A = creer_valeur(LC.valeur);
         avancer();
         break;
     case PARO:
         avancer();
-        rec_eag();
+        A = rec_eag();
         if(LC.nature == PARF){
             avancer();
         }
@@ -82,39 +63,67 @@ void rec_facteur()
             printf("Erreur :( PARO ");
         }
         break;
+    case MOINS:
+        avancer();
+        A = rec_facteur();
+        A = creer_op_unaire(MOINS, A);
+        break;
     default:
-        printf("Erreur de syntaxe : '(', entier ou ')' attendu ");
+        printf("Erreur de syntaxe : '(', entier ou ')'");
         break;
     }
+    return A;
 }
-void rec_op1()
+TypeOperateur rec_op1()
 {
     Lexeme LC = lexeme_courant();
+    TypeOperateur Op;
     switch (LC.nature)
     {
     case PLUS:
+        Op = N_PLUS;
+        avancer();
+        break;
     case MOINS:
+        Op = N_MOINS;
         avancer();
         break;
     default:
-        printf("Erreur de syntaxe : '+' ou '-' attendu ");
+        printf("Erreur : '+' / '-'");
         break;
     }
+    return Op;
 }
-void rec_op2()
+TypeOperateur rec_op1()
 {
     Lexeme LC = lexeme_courant();
+    TypeOperateur Op;
     switch (LC.nature)
     {
     case PLUS:
+        Op = N_PLUS;
+        avancer();
+        break;
     case MOINS:
+        Op = N_MOINS;
         avancer();
         break;
     default:
-        printf("Erreur de syntaxe : '+' ou '-' attendu ");
+        printf("Erreur : '+' / '-'");
         break;
     }
+    return Op;
 }
+Ast creer_op_unaire(TypeOperateur Op, Ast A)
+{
+    Ast A1 = (Ast)malloc(sizeof(NoeudAst));
+    A1->nature = OPERATION;
+    A1->operateur = Op;
+    A1->gauche = A;
+    A1->droite = NULL;
+    return A1;
+}
+/*
 void rec_ea(int *resultat){
     Lexeme Var_lexeme_courant = lexeme_courant(); 
     if (Var_lexeme_courant.nature == ENTIER )
@@ -226,9 +235,10 @@ void rec_ea(int *resultat){
     }
     
 }
-void analyser (char *fichier){
+*/
+void analyser (char *fichier, Ast *arbre){
     demarrer(fichier);
-    rec_eag();
+    *arbre = rec_eag();
     if (!fin_de_sequence())
     {
         printf("Erreur de syntaxe \n");
@@ -237,4 +247,7 @@ void analyser (char *fichier){
     else{
         printf("Yayy :D !! Syntaxe est correct \n");
     }
+    printf(" OK :) \n");
+    int resultat= evaluation(*arbre);
+    printf("Le resultat est : %d \n",resultat);
 }

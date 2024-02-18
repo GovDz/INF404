@@ -248,7 +248,7 @@
    /* --------------------------------------------------------------------- */
 
    // affiche a l'ecran le lexeme l
-   void afficher(Lexeme l) {
+   void afficher_lexem(Lexeme l) {
 
       switch (l.nature) {
          case FIN_SEQUENCE: 
