@@ -68,11 +68,11 @@ void facteur(Ast *A1) {
             if (lexeme_courant().nature == PARF) {
                 avancer();
             } else {
-                handle_error("parenthese fermante attendue");
+                handle_error("Missing PARF");
             }
             break;
         default:
-            handle_error("entier ou parenthese ouvrante attendu");
+            handle_error("Missing PARO");
     }
 }
 
