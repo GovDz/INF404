@@ -6,7 +6,7 @@
 
 TypeOperateur Operateur(Nature_Lexeme nature); // si on met cette fonction dans analyse_lexicale.h, on a une erreur de compilation
 
-void rec_eag(Ast *A1) {  // d'apres le cours + aide d'AI pour l'optimisation
+void rec_eag(Ast *A1) {  // d'apres le cours 
     seq_terme(A1);
 }
 void seq_terme(Ast *A2) {
